@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Surprise</title>
+</head>
+<body>
+  <h1>Surprise</h1>
+
+  {% if is_win %}
+    <p>Discount: {{ discount }}</p>
+  {% else %}
+    <p>Наступного разу</p>
+  {% endif %}
+
+</body>
+</html>
