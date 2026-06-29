@@ -5,12 +5,21 @@
   <title>Home</title>
 </head>
 <body>
+
+  {% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+      <strong> {{ msg }} </strong>
+    {% endfor %}
+  {% endwith %}
+
   <h1>Python</h1>
   <p>about course</p>
   <img src="https://cdn-icons-png.flaticon.com/512/5968/5968544.png" width="100">
+
   <br>
   <a href="{{ url_for('register') }}">
     <button>Register</button>
   </a>
+
 </body>
 </html>

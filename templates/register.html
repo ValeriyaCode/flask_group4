@@ -7,10 +7,14 @@
 <body>
   <h1>Register</h1>
 
-
+  {% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+      <strong> {{ msg }} </strong>
+    {% endfor %}
+  {% endwith %}
 
   <form method="POST">
-    <input name="name" type="text" placeholder="name">
+    <input name="name" type="text" placeholder="name" required>
     <input name="phone" type="number" placeholder="380_________">
     <button type="submit">Send</button>
   </form>
