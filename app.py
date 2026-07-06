@@ -19,6 +19,7 @@ def products():
         if title in all_products:
             flash(f'Product {title} already exists!')
         else:
+            # додавання товару
             all_products.update({title: {'price': price, 'category': category}})
             flash(f'Product {title} was added!')
 
