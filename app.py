@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
+from models import init_db
+from actions_db import *
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
 
-all_products = {}
+# підключення до БД
+init_db()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -16,21 +19,35 @@ def products():
 
         price = float(price)
 
-        if title in all_products:
+        if product_exists(title):
             flash(f'Product {title} already exists!')
         else:
-            all_products.update({title: {'price': price, 'category': category}})
+            add_product(title, price, category)
             flash(f'Product {title} was added!')
 
         return redirect(url_for('products'))
 
-    return render_template('product.html', products=all_products)
+    # актуальні категорії на основі товарів
+    all_categories = get_categories()
+
+    # обрана категорія
+    choose_category = request.args.get('category', 'all')
+
+    if choose_category == 'all':
+        filter_products = get_products()
+    else:
+        # фільтрація
+        filter_products = get_products_by_category(choose_category)
+
+    return render_template('product.html',
+                           products=filter_products,
+                           categories=all_categories,
+                           choose_category=choose_category)
 
 
 # динамічне посилання з параметрами <>
 @app.route('/delete/<name_product>')
 def delete(name_product):
-    all_products.pop(name_product)
     flash(f'Product {name_product} was deleted!')
 
     return redirect(url_for('products'))
