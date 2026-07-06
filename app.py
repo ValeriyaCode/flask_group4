@@ -36,3 +36,5 @@ def delete(name_product):
     return redirect(url_for('products'))
 
 app.run(debug=True)
+
+
