@@ -20,10 +20,10 @@ def products():
         price = float(price)
 
         if product_exists(title):
-            flash(f'Product {title} already exists!')
+            flash(f'Product {title} already exists!', category='error')
         else:
             add_product(title, price, category)
-            flash(f'Product {title} was added!')
+            flash(f'Product {title} was added!', category='success')
 
         return redirect(url_for('products'))
 
@@ -48,7 +48,7 @@ def products():
 # динамічне посилання з параметрами <>
 @app.route('/delete/<name_product>')
 def delete(name_product):
-    flash(f'Product {name_product} was deleted!')
+    flash(f'Product {name_product} was deleted!', category='success')
 
     return redirect(url_for('products'))
 

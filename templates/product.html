@@ -3,102 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <title>Products</title>
+
+  <!--Підключення CSS файлу-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <h1>Product manager</h1>
+  <!--div - блок елементів -->
 
-  {% with messages = get_flashed_messages() %}
-    {% for msg in messages %}
-      <p>{{ msg }}</p>
-    {% endfor %}
-  {% endwith %}
+  <!--Шапка-->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
 
-  <!-- форма для додавання товару -->
-  <h3>Add product:</h3>
+        <a href="{{ url_for('products') }}">
+          <!-- Адреса до статичного файлу -->
+          <img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo">
+          <span>Product Manager</span>
+        </a>
 
-  <form method="POST">
-    <input name="title" type="text" placeholder="Title">
-    <input name="price" type="number" placeholder="Price">
-    <input name="category" type="text" placeholder="Category">
+      </div>
+    </div>
+  </header>
 
-    <button type="submit">Add</button>
-  </form>
+  <!--Основний контент-->
+  <main>
 
+    <div class="container">
+      <h1>Product manager</h1>
 
-  <!-- форма для фільтрації товарів -->
-  <h3>Filter:</h3>
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% for category, msg in messages %}
+          <p class="flash {{ category }}">{{ msg }}</p>
+        {% endfor %}
+      {% endwith %}
 
-  <!--
-  select - випадаючий список
-  option - пункт списку
+      <!-- форма для додавання товару -->
+      <h3>Add product:</h3>
 
-  value - значення, яке буде отримувати сервер
-  selected - обраний по-замовчуванню пункт
-  -->
+      <form method="POST">
+        <input name="title" type="text" placeholder="Title">
+        <input name="price" type="number" placeholder="Price">
+        <input name="category" type="text" placeholder="Category">
 
-  <form method="GET">
-    <select name="category">
-      <option value="all" {% if choose_category=="all" %} selected {% endif %} > All</option>
+        <button type="submit">Add</button>
+      </form>
 
-      {% for category in categories %}
-        <option value={{category}} {% if choose_category==category %} selected {% endif %} >{{ category }}</option>
-      {% endfor %}
-    </select>
+      <!-- форма для фільтрації товарів -->
+      <h3>Filter:</h3>
 
-    <button type="submit">Submit</button>
-  </form>
+      <form method="GET">
+        <select name="category">
+          <option value="all" {% if choose_category=="all" %} selected {% endif %} > All</option>
 
+          {% for category in categories %}
+            <option value={{category}} {% if choose_category==category %} selected {% endif %} >{{ category }}</option>
+          {% endfor %}
+        </select>
 
-  <!-- список всіх товарів -->
-  <h3>Products:</h3>
+        <button type="submit">Submit</button>
+      </form>
 
-  <!--
-  table - таблиця
-  thead - шапка
-  tbody - дані
-  tfoot - інформація під таблицею
+      <!-- список всіх товарів -->
+      <h3>Products:</h3>
 
-  tr - ряд
-  th - комірка з жирним текстом
-  td - комірка з даними
+      <table border="1" cellpadding="5" >
 
-  border - обводка
-  cellpadding - для місця в комірці
-  -->
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-  <table border="1" cellpadding="5" >
+        <tbody>
 
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Category</th>
-        <th>Action</th>
-      </tr>
-    </thead>
+          {% for product in products %}
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.price }}</td>
+              <td>{{ product.category }}</td>
 
-    <tbody>
+              <td>
+                <!--передаємо назву товару для динамічної адреси-->
+                <a href="{{ url_for('delete', name_product=product.name) }}">
+                  <button>Delete</button>
+                </a>
+              </td>
 
-      {% for product in products %}
-        <tr>
-          <td>{{ product.name }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.category }}</td>
+            </tr>
+          {% endfor %}
 
-          <td>
-            <!--передаємо назву товару для динамічної адреси-->
-            <a href="{{ url_for('delete', name_product=product.name) }}">
-              <button>Delete</button>
-            </a>
-          </td>
+        </tbody>
 
-        </tr>
-      {% endfor %}
+        <tfoot></tfoot>
+      </table>
+    </div>
 
-    </tbody>
-
-    <tfoot></tfoot>
-  </table>
+  </main>
 
 </body>
 </html>
