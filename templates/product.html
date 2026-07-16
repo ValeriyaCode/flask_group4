@@ -22,6 +22,12 @@
                alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
           <span class="navbar-brand m-1 h1">Product Manager</span>
         </a>
+
+        <!--Кнопки-->
+        <div>
+          <a href="{{ url_for('login') }}" class="btn btn-light" role="button">Login</a>
+          <a href="{{ url_for('register') }}" class="btn btn-outline-light" role="button">Register</a>
+        </div>
       </div>
     </nav>
   </header>
@@ -33,7 +39,7 @@
         {% with messages = get_flashed_messages() %}
           {% for msg in messages %}
             <div class="alert alert-info" role="alert">
-              msg
+              {{ msg }}
             </div>
           {% endfor %}
         {% endwith %}

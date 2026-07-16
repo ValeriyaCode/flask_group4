@@ -14,7 +14,12 @@ class Product(BaseModel):
     category = CharField()
 
 
+class Company(BaseModel):
+    name = CharField(unique=True)
+    password = CharField()
+
+
 def init_db():
     db.connect()
-    db.create_tables([Product])
+    db.create_tables([Product, Company])
 
