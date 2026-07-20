@@ -11,28 +11,33 @@ def company_exist(name: str) -> bool:
 def get_company_by_name(name: str) -> Company:
     return Company.get_or_none(name=name)
 
+
 '''Products'''
 
-def add_product(name: str, price: float, category: str):
-    Product.create(name=name, price=price, category=category)
+def add_product(name: str, price: float, category: str, company_id: int):
+    Product.create(name=name, price=price, category=category, company=company_id)
 
-def get_categories():
-    products = Product.select(Product.category).distinct().order_by(Product.category)
+def get_categories(company_id: int):
+    products = Product.select(Product.category).where(Product.company == company_id).distinct().order_by(Product.category)
     categories = [product.category for product in products]
     return categories
 
-def get_products():
-    return Product.select()
+def get_products(company_id: int):
+    return Product.select().where(Product.company == company_id)
 
-def get_products_by_category(category: str):
-    return Product.select().where(Product.category == category)
+def get_products_by_category(category: str, company_id: int):
+    return Product.select().where((Product.category == category) & (Product.company == company_id))
 
-def product_exists(name: str) -> bool:
-    return Product.select().where(Product.name == name).exists()
+def product_exists(name: str, company_id: int) -> bool:
+    return Product.select().where((Product.name == name) & (Product.company == company_id)).exists()
 
-def edit_product():
-    pass
+def edit_product(name: str, new_price: float, new_category: str, company_id: int):
+    (
+        Product
+        .update(price=new_price, category=new_category)
+        .where((Product.name == name) & (Product.company == company_id)).execute()
+     )
 
-def delete_product():
-    pass
+def delete_product(name: str, company_id: int):
+    Product.delete().where((Product.name == name) & (Product.company == company_id)).execute()
 

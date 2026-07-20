@@ -13,6 +13,10 @@ init_db()
 def is_logged():
     return 'company' in session
 
+def current_company():
+    name = session['company']
+    return get_company_by_name(name)
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/products', methods=['GET', 'POST'])
@@ -23,6 +27,10 @@ def products():
     if not is_logged():
         return redirect(url_for('login'))
 
+    # отримуємо компанію
+    company = current_company()
+    print(company)
+
     if request.method == 'POST':
         title = request.form.get('title')
         price = request.form.get('price')
@@ -30,25 +38,25 @@ def products():
 
         price = float(price)
 
-        if product_exists(title):
+        if product_exists(title, company.id):
             flash(f'Product {title} already exists!')
         else:
-            add_product(title, price, category)
+            add_product(title, price, category, company.id)
             flash(f'Product {title} was added!')
 
         return redirect(url_for('products'))
 
     # актуальні категорії на основі товарів
-    all_categories = get_categories()
+    all_categories = get_categories(company.id)
 
     # обрана категорія
     choose_category = request.args.get('category', 'all')
 
     if choose_category == 'all':
-        filter_products = get_products()
+        filter_products = get_products(company.id)
     else:
         # фільтрація
-        filter_products = get_products_by_category(choose_category)
+        filter_products = get_products_by_category(choose_category, company.id)
 
     return render_template('product.html',
                            products=filter_products,
