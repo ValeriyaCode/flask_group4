@@ -72,6 +72,11 @@ def delete(name_product):
     return redirect(url_for('products'))
 
 
+@app.route('/edit')
+def edit():
+    return render_template('edit.html')
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
