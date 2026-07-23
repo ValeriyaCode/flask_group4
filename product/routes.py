@@ -20,7 +20,7 @@ def products():
     session.permanent = True
 
     if not is_logged():
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
     # отримуємо компанію
     company = current_company()
