@@ -3,25 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>Edit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <h1>Edit product</h1>
 
-  {% with messages = get_flashed_messages() %}
-    {% for msg in messages %}
-      <p>{{ msg }}</p>
-    {% endfor %}
-  {% endwith %}
+ <!--Шапка-->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+
+        <a href="{{ url_for('products') }}">
+          <img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo">
+          <span>Product Manager</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+
+  <main>
+      <div class="container">
+        <h1>Edit product</h1>
+
+        {% with messages = get_flashed_messages() %}
+          {% for msg in messages %}
+            <p>{{ msg }}</p>
+          {% endfor %}
+        {% endwith %}
 
 
-  <p>Product: {{ name }}</p>
+        <p>Product: {{ name }}</p>
 
-  <form method="POST">
-    <input name="category" type="text" placeholder="category" value="{{ category }}">
-    <input name="price" type="number" step="any" placeholder="price" value="{{ price }}">
+        <form method="POST">
+          <input name="category" type="text" placeholder="category" value="{{ category }}">
+          <input name="price" type="number" step="any" placeholder="price" value="{{ price }}">
 
-    <button type="submit">Save</button>
-  </form>
+          <button type="submit">Save</button>
+        </form>
+      </div>
+  </main>
 
 </body>
 </html>

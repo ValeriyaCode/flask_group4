@@ -3,81 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <title>Products</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <h1>Product manager</h1>
 
-  {% with messages = get_flashed_messages() %}
-    {% for msg in messages %}
-      <p>{{ msg }}</p>
-    {% endfor %}
-  {% endwith %}
+ <!--Шапка-->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
 
-  <!-- форма для додавання товару -->
-  <h3>Add product:</h3>
+        <a href="{{ url_for('products') }}">
+          <img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo">
+          <span>Product Manager</span>
+        </a>
 
-  <form method="POST">
-    <input name="title" type="text" placeholder="Title">
-    <input name="price" type="number" placeholder="Price">
-    <input name="category" type="text" placeholder="Category">
+      </div>
+    </div>
+  </header>
 
-    <button type="submit">Add</button>
-  </form>
+ <main>
+    <div class="container">
+       <h1>Product manager</h1>
 
-  <!-- список всіх товарів -->
-  <h3>Products:</h3>
+        {% with messages = get_flashed_messages() %}
+          {% for msg in messages %}
+            <p>{{ msg }}</p>
+          {% endfor %}
+        {% endwith %}
 
-  <!--
-  table - таблиця
-  thead - шапка
-  tbody - дані
-  tfoot - інформація під таблицею
+        <!-- форма для додавання товару -->
+        <h3>Add product:</h3>
 
-  tr - ряд
-  th - комірка з жирним текстом
-  td - комірка з даними
+        <form method="POST">
+          <input name="title" type="text" placeholder="Title">
+          <input name="price" type="number" placeholder="Price">
+          <input name="category" type="text" placeholder="Category">
 
-  border - обводка
-  cellpadding - для місця в комірці
-  -->
+          <button type="submit">Add</button>
+        </form>
 
-  <table border="1" cellpadding="5" >
+        <!-- список всіх товарів -->
+        <h3>Products:</h3>
 
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Category</th>
-        <th>Action</th>
-      </tr>
-    </thead>
+        <table border="1" cellpadding="5" >
 
-    <tbody>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-      {% for product in products %}
-        <tr>
-          <td>{{ product.name }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.category }}</td>
+          <tbody>
 
-          <td>
-            <!--передаємо назву товару для динамічної адреси-->
-            <a href="{{ url_for('delete', name_product=product.name) }}">
-              <button>Delete</button>
-            </a>
+            {% for product in products %}
+              <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.category }}</td>
 
-            <a href="{{ url_for('edit', name_product=product.name) }}">
-              <button>Edit</button>
-            </a>
-          </td>
+                <td>
+                  <!--передаємо назву товару для динамічної адреси-->
+                  <a href="{{ url_for('delete', name_product=product.name) }}">
+                    <button>Delete</button>
+                  </a>
 
-        </tr>
-      {% endfor %}
+                  <a href="{{ url_for('edit', name_product=product.name) }}">
+                    <button>Edit</button>
+                  </a>
+                </td>
 
-    </tbody>
+              </tr>
+            {% endfor %}
 
-    <tfoot></tfoot>
-  </table>
+          </tbody>
+
+          <tfoot></tfoot>
+        </table>
+
+    </div>
+  </main>
 
 </body>
 </html>
