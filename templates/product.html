@@ -24,31 +24,6 @@
     <button type="submit">Add</button>
   </form>
 
-
-  <!-- форма для фільтрації товарів -->
-  <h3>Filter:</h3>
-
-  <!--
-  select - випадаючий список
-  option - пункт списку
-
-  value - значення, яке буде отримувати сервер
-  selected - обраний по-замовчуванню пункт
-  -->
-
-  <form method="GET">
-    <select name="category">
-      <option value="all" {% if choose_category=="all" %} selected {% endif %} > All</option>
-
-      {% for category in categories %}
-        <option value={{category}} {% if choose_category==category %} selected {% endif %} >{{ category }}</option>
-      {% endfor %}
-    </select>
-
-    <button type="submit">Submit</button>
-  </form>
-
-
   <!-- список всіх товарів -->
   <h3>Products:</h3>
 
@@ -79,16 +54,20 @@
 
     <tbody>
 
-      {% for product in products %}
+      {% for title, info in products.items() %}
         <tr>
-          <td>{{ product.name }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.category }}</td>
+          <td>{{ title }}</td>
+          <td>{{ info['price'] }}</td>
+          <td>{{ info['category'] }}</td>
 
           <td>
             <!--передаємо назву товару для динамічної адреси-->
-            <a href="{{ url_for('delete', name_product=product.name) }}">
+            <a href="{{ url_for('delete', name_product=title) }}">
               <button>Delete</button>
+            </a>
+
+            <a href="{{ url_for('edit', name_product=title) }}">
+              <button>Edit</button>
             </a>
           </td>
 
