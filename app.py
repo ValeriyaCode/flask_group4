@@ -2,12 +2,32 @@ from flask import Flask, render_template, request, flash, redirect, url_for, ses
 from models import init_db
 from actions_db import *
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
 
 # підключення до БД
 init_db()
+
+
+def validate_registration(user_login, password):
+    if not user_login:
+        return 'Логін не може бути порожнім'
+
+    if len(password) < 6:
+        return 'Пароль має бути не коротшим за 6 символів'
+
+    if not re.search(r'[A-Za-z]', password):
+        return 'Пароль має містити хоча б одну літеру'
+
+    if not re.search(r'\d', password):
+        return 'Пароль має містити хоча б одну цифру'
+
+    if not re.search(r'[^A-Za-z0-9]', password):
+        return 'Пароль має містити хоча б один спеціальний знак'
+
+    return None
 
 
 def is_logged():
@@ -70,6 +90,12 @@ def register():
         name = request.form.get('name')
         password = request.form.get('password')
 
+        result_check = validate_registration(name, password)
+
+        if result_check is not None:
+            flash(result_check)
+            return redirect(url_for('register'))
+
         if company_exist(name):
             flash(f'Company {name} already exists!')
             return redirect(url_for('register'))
@@ -109,5 +135,11 @@ def login():
 
     return render_template('login.html')
 
+
+@app.route('/logout')
+def logout():
+    session.pop('company')
+    flash('You have been logged out!')
+    return redirect(url_for('login'))
 
 app.run(debug=True)

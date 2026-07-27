@@ -25,7 +25,12 @@
 
         <!--Кнопки-->
         <div>
-          <a href="{{ url_for('login') }}" class="btn btn-light" role="button">Login</a>
+          {% if session.get('company') %}
+            <a href="{{ url_for('logout') }}" class="btn btn-light" role="button">Logout</a>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-light" role="button">Login</a>
+          {% endif %}
+
           <a href="{{ url_for('register') }}" class="btn btn-outline-light" role="button">Register</a>
         </div>
       </div>
