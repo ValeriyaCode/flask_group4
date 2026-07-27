@@ -48,6 +48,7 @@ def products():
 # динамічне посилання з параметрами <>
 @app.route('/delete/<name_product>')
 def delete(name_product):
+    delete_product(name_product)
     flash(f'Product {name_product} was deleted!')
 
     return redirect(url_for('products'))
@@ -55,21 +56,21 @@ def delete(name_product):
 
 @app.route('/edit/<name_product>', methods=['GET', 'POST'])
 def edit(name_product):
-    current_price = all_products[name_product]['price']
-    current_category = all_products[name_product]['category']
+    product = get_product_by_name(name_product)
+
+    current_price = product.price
+    current_category = product.category
 
     if request.method == 'POST':
         new_category = request.form.get('category')
         new_price = request.form.get('price')
-
         new_price = float(new_price)
 
         if new_category == current_category and new_price == current_price:
             flash(f'Change data of this product!')
             return redirect(url_for('edit', name_product=name_product))
 
-        all_products[name_product]['category'] = new_category
-        all_products[name_product]['price'] = new_price
+        edit_product(name_product, new_price, new_category)
 
         flash(f'Product {name_product} was updated!')
         return redirect(url_for('products'))

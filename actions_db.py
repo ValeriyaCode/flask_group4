@@ -5,6 +5,8 @@ def add_product(name: str, price: float, category: str):
     Product.create(name=name, price=price, category=category)
 
 '''read'''
+def get_product_by_name(name: str) -> Product:
+    return Product.get_or_none(name=name)
 
 def get_categories():
     products = Product.select(Product.category).distinct().order_by(Product.category)
@@ -22,11 +24,13 @@ def product_exists(name: str) -> bool:
 
 
 '''update'''
-def edit_product():
-    pass
+def edit_product(name: str, new_price: float, new_category: str):
+    (
+        Product
+        .update(price=new_price, category=new_category)
+        .where(Product.name == name).execute()
+     )
 
-
-'''delete'''
-def delete_product():
-    pass
+def delete_product(name: str):
+    Product.delete().where(Product.name == name).execute()
 
