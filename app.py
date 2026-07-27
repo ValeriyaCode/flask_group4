@@ -36,6 +36,33 @@ def delete(name_product):
 
     return redirect(url_for('products'))
 
+
+@app.route('/edit/<name_product>', methods=['GET', 'POST'])
+def edit(name_product):
+    current_price = all_products[name_product]['price']
+    current_category = all_products[name_product]['category']
+
+    if request.method == 'POST':
+        new_category = request.form.get('category')
+        new_price = request.form.get('price')
+
+        new_price = float(new_price)
+
+        if new_category == current_category and new_price == current_price:
+            flash(f'Change data of this product!')
+            return redirect(url_for('edit', name_product=name_product))
+
+        all_products[name_product]['category'] = new_category
+        all_products[name_product]['price'] = new_price
+
+        flash(f'Product {name_product} was updated!')
+        return redirect(url_for('products'))
+
+    return render_template('edit.html',
+                           name=name_product,
+                           price=current_price,
+                           category=current_category)
+
 app.run(debug=True)
 
 

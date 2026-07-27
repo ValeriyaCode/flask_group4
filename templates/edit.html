@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit</title>
+</head>
+<body>
+  <h1>Edit product</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+      <p>{{ msg }}</p>
+    {% endfor %}
+  {% endwith %}
+
+
+  <p>Product: {{ name }}</p>
+
+  <form method="POST">
+    <input name="category" type="text" placeholder="category" value="{{ category }}">
+    <input name="price" type="number" step="any" placeholder="price" value="{{ price }}">
+
+    <button type="submit">Save</button>
+  </form>
+
+</body>
+</html>
